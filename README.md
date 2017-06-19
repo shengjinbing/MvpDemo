@@ -1,0 +1,3 @@
+# MvpDemo
+综合demo分享
+##主要实现一般项目的界面搭建，其次是实现recyclerView结合SwipeRefreshLayout实现上拉和下拉操作，并且recyclerView实现了多布局功能，灵活性很强。
