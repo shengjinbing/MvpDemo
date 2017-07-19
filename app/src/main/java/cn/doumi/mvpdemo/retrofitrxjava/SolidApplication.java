@@ -2,6 +2,7 @@ package cn.doumi.mvpdemo.retrofitrxjava;
 
 import android.app.Application;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 
@@ -23,14 +24,13 @@ public class SolidApplication extends Application{
         return mInstance;
     }
 
-    @Override
+
     public File getCacheDir() {
+        File mFile = null;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File cacheDir = getExternalCacheDir();
-            if (cacheDir != null && (cacheDir.exists() || cacheDir.mkdirs())) {
-                return cacheDir;
-            }
+            Log.d("BBBBB","sdcard挂载");
+            mFile = getExternalCacheDir();
         }
-        return super.getCacheDir();
+      return mFile;
     }
 }

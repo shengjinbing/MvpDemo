@@ -15,7 +15,8 @@ public class TransFormUtils {
 
             @Override
             public Observable<T> call(Observable<T> tobservable) {
-                return ((Observable) tobservable).subscribeOn(Schedulers.io())
+                return ((Observable) tobservable)
+                        .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }

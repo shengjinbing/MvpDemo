@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.cache.MemorySizeCalculator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements
     protected BaseRecyclerAdapter mAdapter;
     private boolean isShowIdentityView;
     protected boolean isRefreshing;
-    private List<String> mMdata;
+    private List<ZhuangbiImage> mMdata;
     private boolean isLoadMore;
 
     public DynamicTabFragment() {
@@ -81,6 +82,11 @@ public class DynamicTabFragment extends BaseTitleFragment implements
 
     @Override
     protected void initData() {
+        MemorySizeCalculator calculator = new MemorySizeCalculator(getContext());
+        int defaultMemoryCacheSize  = calculator.getMemoryCacheSize() / 1024 /1024;
+        int defaultBitmapPoolSize = calculator.getBitmapPoolSize() / 1024 /1024;
+        Log.d("BBBBB","defaultMemoryCacheSize ="+  defaultMemoryCacheSize + "defaultBitmapPoolSize="+defaultBitmapPoolSize);
+
         mMdata = new ArrayList<>();
 
         mAdapter = getRecyclerAdapter();
@@ -123,7 +129,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements
 
     }
 
-    protected BaseRecyclerAdapter<String> getRecyclerAdapter() {
+    protected BaseRecyclerAdapter<ZhuangbiImage> getRecyclerAdapter() {
         TestAdapter adapter = new TestAdapter(this);
         adapter.setShowIdentityView(isShowIdentityView);
         return adapter;
@@ -161,15 +167,11 @@ public class DynamicTabFragment extends BaseTitleFragment implements
                 mMdata.clear();
                 if (isLoadMore) {
                     isLoadMore = false;
-                    for (int i = 0; i < 20; i++) {
-                        mMdata.add(data.get(i).getDescription());
-                    }
+                    mMdata.addAll(data);
                     mAdapter.addAll(mMdata);
 
                 } else {
-                    for (int i = 0; i < 20; i++) {
-                        mMdata.add(data.get(i).getDescription());
-                    }
+                    mMdata.addAll(data);
                     mAdapter.clear();
                     mAdapter.addAll(mMdata);
 
@@ -179,6 +181,7 @@ public class DynamicTabFragment extends BaseTitleFragment implements
 
             @Override
             public void _onError(Throwable e) {
+                Log.d("BBBBB", "_onError77777777777777777");
                 if (isLoadMore) {
                     mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
                 }

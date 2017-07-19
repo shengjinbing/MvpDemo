@@ -9,5 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="hello_blank_fragment发现"/>
+    <android.opengl.GLSurfaceView
+        android:id="@+id/GLSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

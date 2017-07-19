@@ -4,11 +4,20 @@
              android:layout_height="match_parent"
              tools:context="cn.doumi.mvpdemo.fragment.TweetViewPagerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/tweet_recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/dianwoba"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!-- TODO: Update blank fragment layout -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tweet_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
-    </android.support.v7.widget.RecyclerView>
 </FrameLayout>

@@ -2,14 +2,18 @@ package cn.doumi.mvpdemo.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.doumi.mvpdemo.LrecyclerViewActivity;
 import cn.doumi.mvpdemo.R;
 import cn.doumi.mvpdemo.adapter.MultiTypeAdapter;
 import cn.doumi.mvpdemo.base.BaseTitleFragment;
@@ -28,6 +32,8 @@ public class TweetViewPagerFragment extends BaseTitleFragment implements OnTabRe
 
     @BindView(R.id.tweet_recyclerview)
     RecyclerView mTweetRecyclerview;
+    @BindView(R.id.dianwoba)
+    Button dianwo_btn;
 
     public TweetViewPagerFragment() {
         // Required empty public constructor
@@ -51,6 +57,14 @@ public class TweetViewPagerFragment extends BaseTitleFragment implements OnTabRe
 
     @Override
     protected void initData() {
+        dianwo_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LrecyclerViewActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mTweetRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Visitable> list = getData();
@@ -63,11 +77,9 @@ public class TweetViewPagerFragment extends BaseTitleFragment implements OnTabRe
     }
     private List<Visitable> getData(){
         List<Visitable> models = new ArrayList<>();
-
         for (int index = 0; index < 50; index++ ){
             models.add(new Normal("Type normal "+ index));
         }
-
         return models;
     }
 

@@ -4,23 +4,36 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.v4.content.SharedPreferencesCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import java.io.File;
 
 import cn.doumi.mvpdemo.widget.SimplexToast;
 
 
 @SuppressLint("InflateParams")
 public class BaseApplication extends Application {
+    private static Context	mContext;
     private static final String PREF_NAME = "creativelocker.pref";
     static Context _context;
+    private static BaseApplication mInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext=this;
+        mInstance = this;
         _context = getApplicationContext();
         //LeakCanary.install(this);
+    }
+
+
+    public static BaseApplication getInstance() {
+        return mInstance;
     }
 
     public static synchronized BaseApplication context() {
@@ -117,4 +130,20 @@ public class BaseApplication extends Application {
         if (context != null)
             SimplexToast.show(context, message, gravity, duration);
     }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+    public   File getCacheDirFile() {
+        File mFile = null;
+        Log.d("BBBBB","sdcard无挂载");
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.d("BBBBB","sdcard挂载");
+            mFile = getExternalCacheDir();
+        }
+        return mFile;
+    }
+
+
 }

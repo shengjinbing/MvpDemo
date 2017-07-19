@@ -6,6 +6,7 @@ import cn.doumi.mvpdemo.MainActivity;
 import cn.doumi.mvpdemo.bean.ZhuangbiImage;
 import cn.doumi.mvpdemo.config.Contants;
 import cn.doumi.mvpdemo.network.api.NetApiService;
+import cn.doumi.mvpdemo.retrofitrxjava.OkHttpProvider;
 import cn.doumi.mvpdemo.retrofitrxjava.TransFormUtils;
 import cn.doumi.mvpdemo.rxlife.ActivityEvent;
 import okhttp3.OkHttpClient;
@@ -43,10 +44,10 @@ public class HttpMethods {
         return httpMethods;
     }
 
-    private NetApiService getTest() {
-
+    private NetApiService getTest(MainActivity activity) {
+//OkHttpProvider.getOkHttpClient()
         Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient())
+                .client(OkHttpProvider.getOkHttpClient())
                 .baseUrl(Contants.BaseURL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(gsonConverterFactory)
@@ -59,7 +60,7 @@ public class HttpMethods {
     }
 
     public Subscription  getZhuangBiData(MainActivity activity, String key, Subscriber subscriber){
-        return getTest().search(key)
+        return getTest(activity).search(key)
                 .compose(TransFormUtils.<List<ZhuangbiImage>>applySchedulers())
                 .compose(activity.bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(subscriber);

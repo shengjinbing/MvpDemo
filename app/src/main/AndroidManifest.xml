@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".TestRxjavaActivity">
         </activity>
+        <activity android:name=".LrecyclerViewActivity">
+        </activity>
     </application>
 
 </manifest>

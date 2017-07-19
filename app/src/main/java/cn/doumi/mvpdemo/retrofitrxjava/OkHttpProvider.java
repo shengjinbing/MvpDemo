@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import cn.doumi.mvpdemo.base.BaseApplication;
+import cn.doumi.mvpdemo.interceptor.towInterceptor;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -29,9 +31,17 @@ public class OkHttpProvider {
         return getOkHttpClient(new CacheControlInterceptor());
     }
 
+
     public static OkHttpClient getOkHttpClient() {
-        return getOkHttpClient(new FromNetWorkControlInterceptor());
+        return getOkHttpClient(new towInterceptor());
     }
+
+    /*这里就说到了我们的两种缓存：
+
+    一、无论有无网络我们都去获取缓存的数据（我们会设置一个缓存时间，在某一段时间内（例如60S）
+    去获取缓存数据。超过60S我们就去网络重新请求数据）
+
+    二、有网络的时候我们就去直接获取网络上面的数据。当没有网络的时候我们就去缓存获取数据。*/
 
     private static OkHttpClient getOkHttpClient(Interceptor cacheControl) {
         //定制OkHttp
@@ -40,16 +50,19 @@ public class OkHttpProvider {
         httpClientBuilder.connectTimeout(DEFAULT_CONNECT_TIMEOUT, TimeUnit.SECONDS);
         httpClientBuilder.writeTimeout(DEFAULT_WRITE_TIMEOUT, TimeUnit.SECONDS);
         httpClientBuilder.readTimeout(DEFAULT_READ_TIMEOUT, TimeUnit.SECONDS);
-        //设置缓存
-        File httpCacheDirectory = new File(SolidApplication.getInstance().getCacheDir(), "OkHttpCache");
-        httpClientBuilder.cache(new Cache(httpCacheDirectory, 100 * 1024 * 1024));
+        //失败后是否重新连接
+        httpClientBuilder.retryOnConnectionFailure(true);
         //设置拦截器
-        httpClientBuilder.addInterceptor(new UserAgentInterceptor("Android Device"));
-        httpClientBuilder.addInterceptor(new LoggingInterceptor());
+       /* httpClientBuilder.addInterceptor(new UserAgentInterceptor("Android Device"));
+        httpClientBuilder.addInterceptor(new LoggingInterceptor());*/
         httpClientBuilder.addInterceptor(cacheControl);
-        httpClientBuilder.addNetworkInterceptor(cacheControl);
+        //httpClientBuilder.addNetworkInterceptor(cacheControl);
+        //设置缓存
+        File httpCacheDirectory = new File(BaseApplication.getInstance().getCacheDirFile(), "OkHttpCache");
+        httpClientBuilder.cache(new Cache(httpCacheDirectory, 100 * 1024 * 1024));
         return httpClientBuilder.build();
     }
+
 
     /**
      * 没有网络的情况下就从缓存中取
@@ -132,13 +145,13 @@ public class OkHttpProvider {
 
             long t1 = System.nanoTime();
             //SLog.i(this, String.format(Locale.CHINA, "Sending request %s on %s%n%s",
-              //      request.url(), chain.connection(), request.headers()));
+            //      request.url(), chain.connection(), request.headers()));
 
             Response response = chain.proceed(request);
 
             long t2 = System.nanoTime();
             //SLog.i(this, String.format(Locale.CHINA, "Received response for %s in %.1fms%n%s",
-              //      response.request().url(), (t2 - t1) / 1e6d, response.headers()));
+            //      response.request().url(), (t2 - t1) / 1e6d, response.headers()));
 
             return response;
         }

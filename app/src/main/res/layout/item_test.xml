@@ -2,14 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="50dp">
+              android:layout_height="150dp">
 
     <TextView
-        android:background="#f00"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:text="我爱你"
         android:id="@+id/item_test_textview"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_gravity="center"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
